@@ -4,22 +4,40 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+@Entity
 public class Topico {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	private String titulo;
+	
 	private String mensaje;
+	
 	private LocalDateTime fechaCreacion = LocalDateTime.now();
+	
+	@Enumerated(EnumType.STRING) //Para que guarde el String (SIN_RESPUESTA) en vez de su posicion (0)
 	private StatusTopico status = StatusTopico.SIN_RESPUESTA;
+	
+	@ManyToOne //Muchos Topicos para un Usuario
 	private Usuario autor;
+	
+	@ManyToOne //Muchos Topicos para un Curso
 	private Curso curso;
+	
+	@OneToMany(mappedBy = "topico") //Un Topico para muchas Respuestas, se pone la variable relacion (topico) que esta en Respuesta
 	private List<Respuesta> respuestas = new ArrayList<>();
-
-	public Topico(String titulo, String mensaje, Curso curso) {
-		this.titulo = titulo;
-		this.mensaje = mensaje;
-		this.curso = curso;
-	}
+	
 
 	@Override
 	public int hashCode() {
