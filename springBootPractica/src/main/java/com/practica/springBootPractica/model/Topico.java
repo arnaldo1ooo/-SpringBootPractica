@@ -3,6 +3,7 @@ package com.practica.springBootPractica.model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -38,6 +39,18 @@ public class Topico {
 	@OneToMany(mappedBy = "topico") //Un Topico para muchas Respuestas, se pone la variable relacion (topico) que esta en Respuesta
 	private List<Respuesta> respuestas = new ArrayList<>();
 	
+	//Constructores
+	public Topico() {
+		
+	}
+	
+	public Topico(String titulo, String mensaje, Optional<Usuario> usuario, Optional<Curso> curso) {
+		this.titulo = titulo;
+		this.mensaje = mensaje;
+		
+		usuario.ifPresent(a-> this.autor = a);
+		curso.ifPresent(c-> this.curso = c);
+	}
 
 	@Override
 	public int hashCode() {
