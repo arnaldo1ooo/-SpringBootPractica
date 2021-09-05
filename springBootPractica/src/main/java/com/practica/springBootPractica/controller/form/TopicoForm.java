@@ -1,20 +1,28 @@
 package com.practica.springBootPractica.controller.form;
 
 import java.util.Optional;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.practica.springBootPractica.model.Curso;
 import com.practica.springBootPractica.model.Topico;
 import com.practica.springBootPractica.model.Usuario;
 
-//Clases tipo Form envian datos a la bd
+//Clases tipo Formulario envian datos a la bd
 
 public class TopicoForm {
+	
+	@NotBlank @Size(min = 5)
 	private String titulo;
 	
+	@NotBlank @Size(min = 5)
 	private String mensaje;
 	
+	@NotNull
 	private Long idUsuario;
 	
+	@NotBlank @Size(min = 5)
 	private String cursoNombre;
 
 	

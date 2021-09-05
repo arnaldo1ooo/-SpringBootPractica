@@ -4,6 +4,8 @@ package com.practica.springBootPractica.controller;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +35,8 @@ public class TopicosController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<TopicoDTO> registrar(@RequestBody TopicoForm topicoForm, UriComponentsBuilder uriComponentsBuilder) {
+	public ResponseEntity<TopicoDTO> registrar(@Valid @RequestBody TopicoForm topicoForm, 
+			UriComponentsBuilder uriComponentsBuilder) { //@Valid ejecuta el beanValidation
 		Topico topico = topicoService.registrar(topicoForm);
 		
 		URI uri = uriComponentsBuilder.path("/topicos/{id}").buildAndExpand(topico.getId()).toUri();
