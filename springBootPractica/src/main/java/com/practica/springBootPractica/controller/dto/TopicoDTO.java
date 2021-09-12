@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+
 import com.practica.springBootPractica.model.Topico;
 
 //Clases tipo DTO reciben datos de la bd
@@ -22,10 +24,9 @@ public class TopicoDTO {	//Data Tranfer Object, aca se puede especificar que cam
 		this.fechaCreacion = topico.getFechaCreacion();
 	}
 	
-	public static List<TopicoDTO> convertir(List<Topico> topicos) {
-		return topicos.stream().map(TopicoDTO::new).collect(Collectors.toList()); //Convierte lista Topico a lista TopicoDTO, por que si se devuelve directamente el dominio, model o entidad Topico, estamos devolviendo todos sus campos, es una practica incorrecta devolver directamente el modelo
+	public static Page<TopicoDTO> convertir(Page<Topico> topicos) {
+		return topicos.map(TopicoDTO::new);
 	}
-	
 	
 	
 	

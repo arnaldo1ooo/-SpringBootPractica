@@ -22,6 +22,11 @@ import com.practica.springBootPractica.repository.CursoRepository;
 import com.practica.springBootPractica.repository.TopicoRepository;
 import com.practica.springBootPractica.repository.UsuarioRepository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+
 @Service
 public class TopicoService {
 
@@ -34,14 +39,14 @@ public class TopicoService {
 	@Autowired
 	private CursoRepository cursoRepository;
 
-	public List<TopicoDTO> listado(String cursoNombre) {
-		List<Topico> resultado;
+	public Page<TopicoDTO> listado(String cursoNombre, Pageable pageable) {
+		Page<Topico> resultado;
 		
 		if (cursoNombre == null) {
-			resultado = topicoRepository.findAll();
+			resultado = topicoRepository.findAll(pageable);
 		}
 		else {
-			resultado = topicoRepository.findByCurso_Nombre(cursoNombre);
+			resultado = topicoRepository.findByCurso_Nombre(cursoNombre, pageable);
 		}
 		
 		return TopicoDTO.convertir(resultado);
