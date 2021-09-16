@@ -8,6 +8,8 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 
 import com.practica.springBootPractica.controller.dto.TopicoDTO;
@@ -39,6 +41,7 @@ public class TopicoService {
 	@Autowired
 	private CursoRepository cursoRepository;
 
+	@Cacheable(value = "listadoDeTopicos")
 	public Page<TopicoDTO> listado(String cursoNombre, Pageable pageable) {
 		Page<Topico> resultado;
 		
@@ -52,6 +55,7 @@ public class TopicoService {
 		return TopicoDTO.convertir(resultado);
 	}
 
+	@CacheEvict(value = "listadoDeTopicos", allEntries = true) //Limpia la cache si el metodo es ejecutado
 	public Topico registrar(TopicoForm topicoForm) {
 		Optional<Usuario> usuario= usuarioRepository.findById(topicoForm.getIdUsuario());
 		Optional<Curso> curso = cursoRepository.findByNombre(topicoForm.getCursoNombre());
@@ -73,6 +77,7 @@ public class TopicoService {
 	}
 
 	@Transactional
+	@CacheEvict(value = "listadoDeTopicos", allEntries = true) //Limpia la cache si el metodo es ejecutado
 	public Topico actualizar(Long id, @Valid ActualizaTopicoForm actualizaTopicoForm) {
 		Optional<Topico> optTopico = topicoRepository.findById(id);
 		
@@ -88,6 +93,7 @@ public class TopicoService {
 		return topico;
 	}
 
+	@CacheEvict(value = "listadoDeTopicos", allEntries = true) //Limpia la cache si el metodo es ejecutado
 	public void borrar(Long id) {
 		Optional<Topico> optTopico = topicoRepository.findById(id);
 		
