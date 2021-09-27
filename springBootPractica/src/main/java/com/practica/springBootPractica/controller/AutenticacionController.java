@@ -20,11 +20,16 @@ public class AutenticacionController {
 	@Autowired
 	private AutenticacionService autenticacionService;
 	
+	
+	
 	@PostMapping
 	public ResponseEntity<?> auth(@RequestBody @Valid LoginForm loginForm){
 		try {
 			String token = autenticacionService.autenticacionConToken(loginForm);
-			return ResponseEntity.ok(new TokenDTO(token, "Bearer"));
+			
+			//System.out.println("El token generado (valido por Xm) " + token);
+			
+			return ResponseEntity.ok(new TokenDTO(token, "Bearer "));
 		} catch (AuthenticationException e) {
 			return ResponseEntity.badRequest().build();
 		}

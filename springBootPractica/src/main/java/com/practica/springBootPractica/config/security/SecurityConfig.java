@@ -12,6 +12,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.practica.springBootPractica.repository.UsuarioRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -20,10 +23,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Autowired
 	private AutenticacionService autenticacionService;
 	
+	@Autowired
+	private TokenService tokenService;
+	
+	@Autowired
+	private UsuarioRepository usuarioRepository;
+	
 	@Bean
 	@Override
 	protected AuthenticationManager authenticationManager() throws Exception {
 		return super.authenticationManager();
+	}
+	
+	public static void main(String[] args) {
+		//System.out.println("Encriptado " + new BCryptPasswordEncoder().encode("123456")); //Para encriptar en bcrypt
 	}
 	
 	
@@ -33,11 +46,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		auth.userDetailsService(autenticacionService)
 			.passwordEncoder(new BCryptPasswordEncoder());
 	}
-	
-	public static void main(String[] args) {
-		System.out.println("Encriptado " + new BCryptPasswordEncoder().encode("123456")); //Para encriptar en bcrypt
-	}
-	
 
 	// Configuraciones de autorizacion de acceso
 	@Override
@@ -48,7 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.antMatchers(HttpMethod.POST, "/auth").permitAll() // Permite el acceso a autenticacion, se debe habilitar para que los usuarios puedan loguearse
 			.anyRequest().authenticated()
 			.and().csrf().disable()
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and().addFilterBefore(new AutenticacionPorTokenFilter(tokenService, usuarioRepository), UsernamePasswordAuthenticationFilter.class);	// Para que la auth de token se ejecute primero
 	}
 	
 	// Configuraciones de recursos estaticos (js, css, png, etc)
