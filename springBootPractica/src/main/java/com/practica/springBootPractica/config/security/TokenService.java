@@ -54,7 +54,7 @@ public class TokenService {
 			
 			return Optional.of(claims);
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			return Optional.empty();
 		} 
 	}

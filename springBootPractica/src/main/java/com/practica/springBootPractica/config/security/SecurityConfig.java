@@ -54,6 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.antMatchers(HttpMethod.GET, "/topicos").permitAll() // Pone como publicos todas las consultas a topicos
 			.antMatchers(HttpMethod.GET, "/topicos/*").permitAll() // Pone como publicos todas las consultas individuales a topicos
 			.antMatchers(HttpMethod.POST, "/auth").permitAll() // Permite el acceso a autenticacion, se debe habilitar para que los usuarios puedan loguearse
+			.antMatchers(HttpMethod.GET, "/actuator/**").permitAll() // Solo habilitar en ambiente de pruebasa
 			.anyRequest().authenticated()
 			.and().csrf().disable()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
